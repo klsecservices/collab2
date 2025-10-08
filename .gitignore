@@ -1,0 +1,6 @@
+/static/
+/.env.*
+/docker-compose-*.yml
+/deploy-*.sh
+/passwd*
+/nginx.conf.*

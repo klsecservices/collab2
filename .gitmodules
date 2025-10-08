@@ -1,0 +1,3 @@
+[submodule "collab-agent"]
+	path = collab-agent
+	url = https://github.com/klsecservices/collab-agent

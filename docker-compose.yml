@@ -1,0 +1,44 @@
+services:
+  db:
+    container_name: db
+    image: mongo:4.2
+    restart: always
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+      - ./dbdata:/data/db
+
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+      - "31337:31337"
+    volumes:
+      - ./static:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./passwd:/etc/nginx/passwd
+      - /path/to/fullchain.pem:/etc/nginx/ssl/fullchain.pem
+      - /path/to/privkey.pem:/etc/nginx/ssl/privkey.pem
+      - /path/to/cert.pem:/etc/nginx/ssl/cert.pem
+
+  agent:
+    build: ./collab-agent
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+      - "443:443"
+      - "53:53/udp"
+      - "53:53/tcp"
+      - "25:25"
+      - "587:587"
+    volumes:
+      - /path/to/fullchain.pem:/root/fullchain.pem
+      - /path/to/privkey.pem:/root/privkey.pem
+      - /path/to/cert.pem:/root/cert.pem
+
+  admin:
+    build: ./admin
+    restart: always
+    env_file:
+      - .env
